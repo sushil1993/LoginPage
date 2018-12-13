@@ -5,6 +5,7 @@ local.properties
 .idea/libraries
 .idea/modules.xml
 .idea/workspace.xml
+*.bat
 
 *.idea
 .DS_Store

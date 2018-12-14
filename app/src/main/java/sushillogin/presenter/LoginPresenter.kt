@@ -1,15 +1,13 @@
 package sushillogin.presenter
 
-import android.os.AsyncTask
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import sushillogin.Contracts.LoginContract
+import sushillogin.contracts.LoginContract
 import sushillogin.database.LoginDao
 import sushillogin.database.LoginDetailEntity
 import sushillogin.database.RoomSingleton
@@ -40,13 +38,10 @@ class LoginPresenter constructor(var mView: LoginContract.LoginView, var db: Roo
                 override fun onComplete() {
                     mView.showSuccessMessage()
                     Log.e("DATA", getLoginDetail().get(0).last_name)
-
-
                 }
 
                 override fun onSubscribe(d: Disposable) {
                     mView.showSuccessMessage()
-
                 }
 
                 override fun onNext(t: LoginModel) {

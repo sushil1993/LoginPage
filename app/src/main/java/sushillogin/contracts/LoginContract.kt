@@ -1,4 +1,4 @@
-package sushillogin.Contracts
+package sushillogin.contracts
 
 import sushillogin.models.LoginModel
 

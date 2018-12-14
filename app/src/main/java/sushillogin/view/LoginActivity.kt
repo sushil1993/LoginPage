@@ -2,17 +2,11 @@ package sushillogin.view
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 
 import com.example.webwerks.loginpage.R
 import kotlinx.android.synthetic.main.activity_login.*
-import sushillogin.Contracts.LoginContract
-import sushillogin.database.LoginDao
-import sushillogin.database.LoginDetailEntity
+import sushillogin.contracts.LoginContract
 import sushillogin.database.RoomSingleton
 import sushillogin.presenter.LoginPresenter
 

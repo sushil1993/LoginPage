@@ -1,16 +1,24 @@
 package sushillogin.presenter
 
+import android.os.AsyncTask
 import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import sushillogin.Contracts.LoginContract
+import sushillogin.database.LoginDao
+import sushillogin.database.LoginDetailEntity
+import sushillogin.database.RoomSingleton
 import sushillogin.models.LoginModel
 import sushillogin.network.ApiClient
 
-class LoginPresenter constructor(var mView: LoginContract.LoginView) : LoginContract.LoginPresenter {
+class LoginPresenter constructor(var mView: LoginContract.LoginView, var db: RoomSingleton) :
+    LoginContract.LoginPresenter, LoginDao {
+
 
     val apiClient = ApiClient.getApiClient()
 
@@ -31,6 +39,9 @@ class LoginPresenter constructor(var mView: LoginContract.LoginView) : LoginCont
             .subscribe(object : Observer<LoginModel> {
                 override fun onComplete() {
                     mView.showSuccessMessage()
+                    Log.e("DATA", getLoginDetail().get(0).last_name)
+
+
                 }
 
                 override fun onSubscribe(d: Disposable) {
@@ -39,7 +50,8 @@ class LoginPresenter constructor(var mView: LoginContract.LoginView) : LoginCont
                 }
 
                 override fun onNext(t: LoginModel) {
-                 Log.e("LoginModel", t.data?.email)
+                    insetdb(t)
+
                     //
                 }
 
@@ -51,5 +63,36 @@ class LoginPresenter constructor(var mView: LoginContract.LoginView) : LoginCont
             })
     }
 
+
+    override fun insetdb(model: LoginModel) {
+        Log.e("LoginModel", model.data?.email)
+
+
+        var name = LoginDetailEntity(
+
+            model.data!!.id!!.toInt(), model.data!!.role_id!!,
+            model.data!!.first_name!!, model.data!!.last_name!!, model.data!!.email!!, model.data!!.username!!,
+            model.data!!.gender!!, model.data!!.phone_no!!
+        )
+        var value = insert(name)
+
+        Observable.just(db.LoginDao().insert(name))
+            .observeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+
+        //insert(name)
+
+
+    }
+
+    override fun getLoginDetail(): List<LoginDetailEntity> {
+        var detailEntity = db.LoginDao().getLoginDetail();
+        return detailEntity
+    }
+
+    override fun insert(loginDetailEntity: LoginDetailEntity) {
+        mView.onDataInserted()
+    }
 
 }

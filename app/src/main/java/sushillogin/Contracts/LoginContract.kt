@@ -1,9 +1,6 @@
 package sushillogin.Contracts
 
-import android.content.Context
-import android.text.Editable
-import com.example.webwerks.loginpage.R
-import sushillogin.view.LoginActivity
+import sushillogin.models.LoginModel
 
 interface LoginContract {
 
@@ -11,6 +8,8 @@ interface LoginContract {
         fun showErrorMessage()
         fun showSuccessMessage()
         fun onLoginBtnCLicked()
+        fun onDataInserted()
+
 
 
     }
@@ -19,6 +18,8 @@ interface LoginContract {
 
         fun validation(email:String,password:String)
         fun doLogin(email:String,password:String)
+        fun insetdb(model: LoginModel)
+
 
     }
 

@@ -7,36 +7,28 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import butterknife.BindView
-import butterknife.ButterKnife
+
 import com.example.webwerks.loginpage.R
+import kotlinx.android.synthetic.main.activity_login.*
 import sushillogin.Contracts.LoginContract
+import sushillogin.database.LoginDao
+import sushillogin.database.LoginDetailEntity
+import sushillogin.database.RoomSingleton
 import sushillogin.presenter.LoginPresenter
 
 class LoginActivity : AppCompatActivity(), LoginContract.LoginView {
 
-    lateinit var email: EditText
-    lateinit var pass: EditText
-    lateinit var button: Button
-
-
-    val mPresenter = LoginPresenter(this)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        email=findViewById<EditText>(R.id.edt_emailid)
-        pass=findViewById<EditText>(R.id.edt_password)
-        button=findViewById<Button>(R.id.btn_submit)
-        button.setOnClickListener {
-            mPresenter.validation(email.text.toString(), pass.text.toString())
+        val db = RoomSingleton.getInstance(this)
+        val mPresenter = LoginPresenter(this,db)
+        btn_submit.setOnClickListener {
+            mPresenter.validation(edt_emailid.text.toString(), edt_password.text.toString())
+
         }
 
     }
-
-
-
-
 
 
     override fun showErrorMessage() {
@@ -53,5 +45,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.LoginView {
     }
 
 
-
+    override fun onDataInserted() {
+        Toast.makeText(this, "data inserted Success", Toast.LENGTH_LONG).show()
+    }
 }
